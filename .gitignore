@@ -1,29 +1,19 @@
-# Output
+# Runtime
+cache/*
+!cache/.gitkeep
+
 output/
-cache/
 backup/
 logs/
 
-# Runtime
 *.log
 *.tmp
 *.bak
 
-# IDE
 .vscode/
 .idea/
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Secret
-secret.env
-
-# Generated Config
-/etc/dnsdist/
-/etc/unbound/
-
-# Swap
 swapfile
-
