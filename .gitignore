@@ -1,10 +1,18 @@
-# Runtime
+# Cache
 cache/*
 !cache/.gitkeep
 
-output/
-backup/
-logs/
+# Output
+output/*
+!output/.gitkeep
+
+# Backup
+backup/*
+!backup/.gitkeep
+
+# Logs
+logs/*
+!logs/.gitkeep
 
 *.log
 *.tmp
