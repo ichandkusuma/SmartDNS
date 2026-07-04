@@ -152,51 +152,30 @@ verify_packages() {
 
     local FAILED=0
 
-    command -v unbound >/dev/null 2>&1 || {
-        warn "unbound missing"
-        FAILED=1
-    }
-
-    command -v dnsdist >/dev/null 2>&1 || {
-        warn "dnsdist missing"
-        FAILED=1
-    }
-
-    command -v dig >/dev/null 2>&1 || {
-        warn "dnsutils missing"
-        FAILED=1
-    }
-
-    command -v curl >/dev/null 2>&1 || {
-        warn "curl missing"
-        FAILED=1
-    }
-
-    command -v wget >/dev/null 2>&1 || {
-        warn "wget missing"
-        FAILED=1
-    }
-
-    command -v unzip >/dev/null 2>&1 || {
-        warn "unzip missing"
-        FAILED=1
-    }
-
-    command -v jq >/dev/null 2>&1 || {
-        warn "jq missing"
-        FAILED=1
-    }
-
-    command -v cdb >/dev/null 2>&1 || {
-        warn "freecdb missing"
-        FAILED=1
-    }
+    for PKG in \
+        unbound \
+        dnsdist \
+        dnsutils \
+        curl \
+        wget \
+        unzip \
+        jq \
+        ca-certificates \
+        freecdb
+    do
+        if dpkg -s "$PKG" >/dev/null 2>&1; then
+            success "$PKG installed"
+        else
+            error "$PKG missing"
+            FAILED=1
+        fi
+    done
 
     if (( FAILED )); then
-        error "Required packages are missing."
         return 1
     fi
 
     success "All required packages installed."
 
 }
+
