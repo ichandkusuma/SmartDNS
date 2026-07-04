@@ -163,24 +163,24 @@ if [[ "$INSTALL_PACKAGE" =~ ^[Yy]$ ]]; then
 	
 	temp_resolv
 	
-    install_packages
+    install_packages || exit 1
     save_state PACKAGE
 
     info "Backup current configuration..."
-    backup_config
+    backup_config || exit 1
 
     info "Installing configuration..."
-    install_config
+    install_config || exit 1
     save_state INSTALL
 
 	info "Installing DNS Blocklist..."
-	install_blocklist
+	install_blocklist || exit 1
 
 	info "Installing Scheduler Update..."
-	install_scheduler
+	install_scheduler || exit 1
 
 	info "Installing Blocklist Scheduler..."
-	install_blocklist_cron
+	install_blocklist_cron || exit 1
 
     info "Validating configuration..."
     validate_config || exit 1
@@ -190,7 +190,7 @@ if [[ "$INSTALL_PACKAGE" =~ ^[Yy]$ ]]; then
     prepare_dns_environment
 
     info "Restarting services..."
-    restart_services
+    restart_services || exit 1
     save_state SERVICE
 
 	if health_check; then

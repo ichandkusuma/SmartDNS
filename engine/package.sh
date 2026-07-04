@@ -57,6 +57,11 @@ install_packages(){
 
         apt-get update || return 1
 
+		if ! apt-get -f install -y; then
+			error "Package manager is not healthy."
+			exit 1
+		fi
+
         info "Installing missing packages..."
 
         apt-get install -y "${MISSING_PACKAGES[@]}" || return 1
