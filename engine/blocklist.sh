@@ -33,17 +33,13 @@ install_blocklist(){
 }
 
 #########################################
-# Cron
+# OLD Cron Remove
 #########################################
 
 install_blocklist_cron(){
 
 cat >/etc/cron.d/smartdns-blocklist <<EOF
-0 3 * * * root /opt/blocklist/update-blocklist.sh >/dev/null 2>&1
+
 EOF
-
-    chmod 644 /etc/cron.d/smartdns-blocklist
-
-    success "Blocklist scheduler installed."
-
+	rm /etc/cron.d/smartdns-blocklist
 }
