@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-=======
 https://smartdns.mynoc.id/data/domains_isp
->>>>>>> 2a32864 (Improve package manager recovery)
 https://trustpositif.komdigi.go.id/assets/db/domains_isp
 https://raw.githubusercontent.com/alsyundawy/TrustPositif/refs/heads/main/sunat-trustpositif.txt
