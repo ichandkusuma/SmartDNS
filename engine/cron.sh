@@ -34,3 +34,24 @@ EOF
     info "Daily update scheduled at $(printf "%02d:%02d" "$HOUR" "$MINUTE") + random delay (0-30 minutes)."
 
 }
+
+####################################
+# Heartbeat Scheduler
+####################################
+
+install_heartbeat_scheduler() {
+
+    info "Installing Heartbeat Scheduler..."
+
+    install -Dm755 \
+        "$BASE_DIR/scripts/smartdns-heartbeat" \
+        /usr/local/bin/smartdns-heartbeat
+
+    install -Dm644 \
+        "$BASE_DIR/templates/smartdns-heartbeat.cron" \
+        /etc/cron.d/smartdns-heartbeat
+
+    success "Heartbeat scheduler installed."
+
+}
+

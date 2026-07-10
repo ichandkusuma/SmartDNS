@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source /var/lib/smartdns/install.env
+
+source "$SMARTDNS_HOME/lib/version.sh"
+source "$SMARTDNS_HOME/lib/telemetry.sh"
+source "$SMARTDNS_HOME/cache/runtime.env"
+
+get_version
+generate_uuid
+
+send_heartbeat >/dev/null 2>&1

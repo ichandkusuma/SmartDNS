@@ -13,6 +13,8 @@ source "$BASE_DIR/lib/logger.sh"
 source "$BASE_DIR/lib/system.sh"
 source "$BASE_DIR/lib/validate.sh"
 source "$BASE_DIR/lib/detect.sh"
+source "$BASE_DIR/lib/version.sh"
+source "$BASE_DIR/lib/telemetry.sh"
 
 ####################################
 # Engine
@@ -81,6 +83,18 @@ info "Save Cache..."
 save_detect_cache
 
 save_state DETECT
+
+####################################
+# Telemetry
+####################################
+
+get_version
+
+generate_uuid
+
+save_install_env
+
+init_install_metadata
 
 ####################################
 # Smart Tuning
@@ -167,7 +181,7 @@ if [[ "$INSTALL_PACKAGE" =~ ^[Yy]$ ]]; then
     save_state PACKAGE
 	
 	verify_packages || exit 1
-	
+		
 	install_swap
 	
 	install_sysctl
@@ -189,6 +203,9 @@ if [[ "$INSTALL_PACKAGE" =~ ^[Yy]$ ]]; then
 
 	info "Installing Blocklist Scheduler..."
 	install_blocklist_cron || exit 1
+
+	info "Installing Heartbeat Scheduler..."
+	install_heartbeat_scheduler || exit 1
 
     info "Validating configuration..."
     validate_config || exit 1
@@ -222,6 +239,20 @@ fi
 ####################################
 
 summary
+
+####################################
+# Summary
+####################################
+
+summary
+
+####################################
+# Telemetry
+####################################
+
+if ! send_heartbeat; then
+    warning "Unable to send telemetry."
+fi
 
 echo
 echo "======================================"
