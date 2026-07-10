@@ -1,39 +1,46 @@
 <div align="center">
 
+<img src="docs/images/banner.png" width="100%">
+
 # SmartDNS
 
 ### Automated DNS Resolver Platform for ISP & Enterprise Networks
 
-Developed and maintained by **MyNOC.ID**
+**Powered by Unbound + dnsdist**
 
-<img src="docs/images/banner.png" width="100%">
+Developed and maintained by **MyNOC.ID**
 
 <br>
 
-![Version](https://img.shields.io/badge/version-v1.0.0-0078D7)
-![Build](https://img.shields.io/badge/build-stable-success)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04+-E95420)
+![Version](https://img.shields.io/badge/Version-v1.0.0-2563eb)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%20LTS-E95420)
 ![Debian](https://img.shields.io/badge/Debian-12-A81D33)
+![Build](https://img.shields.io/badge/Build-Stable-success)
 ![License](https://img.shields.io/github/license/ichandkusuma/SmartDNS)
-![Status](https://img.shields.io/badge/status-production_ready-brightgreen)
+![Stars](https://img.shields.io/github/stars/ichandkusuma/SmartDNS?style=social)
 
 </div>
 
 ---
 
-# About
+# Why SmartDNS?
 
-SmartDNS is an open-source DNS Resolver Platform developed by **MyNOC.ID**.
+Deploying a recursive DNS resolver is often repetitive, time-consuming, and requires extensive manual tuning.
 
-Designed specifically for **Internet Service Providers (ISP)**, **Enterprise Networks**, **Network Operators**, and **Data Centers**, SmartDNS automates deployment, optimization, security hardening, monitoring, and lifecycle management of recursive DNS servers using **Unbound** and **dnsdist**.
+**SmartDNS** automates the entire deployment process—from hardware detection and performance tuning to security hardening and monitoring—allowing administrators to deploy production-ready DNS resolvers in minutes.
 
-Starting from **v1.0.0**, SmartDNS also includes a built-in telemetry platform and centralized monitoring dashboard for managing SmartDNS deployments.
+Designed for:
+
+- 🌐 Internet Service Providers (ISP)
+- 🏢 Enterprise Networks
+- 🖥 Data Centers
+- 🌍 Network Operators
 
 ---
 
 # Features
 
-## Smart Installation
+## 🚀 Smart Installer
 
 - Automatic Hardware Detection
 - Automatic Operating System Detection
@@ -41,46 +48,70 @@ Starting from **v1.0.0**, SmartDNS also includes a built-in telemetry platform a
 - Automatic Memory Detection
 - Automatic Network Detection
 - Automatic Internet Detection
-- Automatic Hostname Detection
 - Automatic Kernel Detection
+- Automatic Hostname Detection
 - Automatic Virtualization Detection
 - Automatic Uptime Detection
 
 ---
 
-## Smart Configuration
+## ⚡ Smart Auto Tuning
 
-- Automatic Unbound Configuration
-- Automatic dnsdist Configuration
-- Automatic Runtime Builder
-- Automatic ACL Generator
-- Automatic Security Hardening
-- Automatic Swap Optimization
-- Automatic Sysctl Optimization
+Automatically optimizes:
+
+### Unbound
+
+- Threads
+- RRSET Cache
+- Message Cache
+- Slabs
+- Infra Cache
+- Outgoing Range
+- Num Queries
+
+### dnsdist
+
+- Packet Cache
+- TCP Threads
+- TCP Queue
+- UDP Outstanding
+
+No manual calculation required.
 
 ---
 
-## DNS Features
+## 🔒 Security
 
 - DNSSEC
-- IPv6 Support
-- DNS Blocklist
 - Rate Limiting
+- ACL Generator
+- Security Hardening
+- Sysctl Optimization
+- Swap Optimization
+
+---
+
+## 🛡 DNS Features
+
+- IPv6 Ready
+- Blocklist Support
 - Query Logging
 - dnsdist Web API
 
 ---
 
-## Monitoring
+## 📡 Built-in Monitoring
+
+Starting from **v1.0.0**, SmartDNS includes a lightweight telemetry platform.
+
+Features include:
 
 - Automatic Heartbeat
-- Built-in Telemetry
-- Dashboard
+- Version Tracking
+- Deployment Monitoring
 - Node Inventory
-- Node Detail
-- Statistics Dashboard
-- Version Distribution
-- Online / Offline Monitoring
+- Statistics
+- Online / Offline Status
 
 ---
 
@@ -96,8 +127,8 @@ Starting from **v1.0.0**, SmartDNS also includes a built-in telemetry platform a
 
 # Minimum Requirements
 
-| Component | Minimum |
-|-----------|---------:|
+| Component | Requirement |
+|-----------|------------:|
 | CPU | 2 Core |
 | RAM | 2 GB |
 | Storage | 20 GB |
@@ -107,6 +138,8 @@ Starting from **v1.0.0**, SmartDNS also includes a built-in telemetry platform a
 
 # Installation
 
+Clone the repository.
+
 ```bash
 git clone https://github.com/ichandkusuma/SmartDNS.git
 
@@ -115,9 +148,22 @@ cd SmartDNS
 bash install.sh
 ```
 
+That's it.
+
+SmartDNS automatically performs:
+
+- Hardware Detection
+- Smart Auto Tuning
+- Runtime Builder
+- ACL Generation
+- Security Hardening
+- Blocklist Installation
+- Service Validation
+- Automatic Heartbeat Registration
+
 ---
 
-# Updating SmartDNS
+# Updating
 
 Updating SmartDNS uses the same installer.
 
@@ -129,15 +175,15 @@ git pull
 bash install.sh
 ```
 
-The installer will automatically:
+The installer automatically:
 
-- Detect existing installation
-- Preserve UUID
-- Preserve telemetry information
-- Update SmartDNS components
-- Update templates
-- Update scheduler
-- Restart required services
+- Detects existing installation
+- Preserves UUID
+- Preserves telemetry data
+- Preserves runtime information
+- Updates SmartDNS components
+- Updates templates
+- Updates scheduler
 
 No manual migration is required.
 
@@ -145,166 +191,131 @@ No manual migration is required.
 
 # Installation Modes
 
-## Fresh Installation
+### Fresh Installation
 
-If SmartDNS has never been installed, the installer performs a full installation.
+Performs a complete installation.
 
-## Upgrade
+### Upgrade
 
-If an existing SmartDNS installation is detected, the installer automatically performs an upgrade while preserving:
+Automatically upgrades SmartDNS while preserving:
 
 - UUID
-- Telemetry
-- Existing configuration
-- Scheduler
-- Runtime information
+- Runtime Information
+- Telemetry Data
+- Existing Configuration
 
 ---
 
-# Smart Installation Workflow
+# Architecture
 
 ```
-Hardware Detection
 
-        │
++-------------------+
 
-        ▼
+| SmartDNS Node |
 
-Smart Auto Tuning
++---------+---------+
 
-        │
+|
 
-        ▼
+Heartbeat
 
-Installation Wizard
+(JSON)
 
-        │
+|
 
-        ▼
+v
 
-ACL Generator
++-------------------+
 
-        │
+| Telemetry API |
 
-        ▼
++---------+---------+
 
-Security Hardening
+|
 
-        │
+v
 
-        ▼
++-------------------+
 
-Blocklist Installation
+| JSON Storage |
 
-        │
++---------+---------+
 
-        ▼
+|
 
-Runtime Builder
+v
 
-        │
++-------------------+
 
-        ▼
+| Monitoring |
 
-Configuration Deployment
+| Dashboard |
 
-        │
++-------------------+
 
-        ▼
-
-Health Check
-
-        │
-
-        ▼
-
-Heartbeat Registration
-
-        │
-
-        ▼
-
-Monitoring Dashboard
 ```
 
 ---
 
-# Smart Auto Tuning
+# Project Structure
 
-SmartDNS automatically calculates the optimal configuration based on detected hardware.
+```
 
-## Unbound
+SmartDNS/
 
-- Threads
-- RRSET Cache
-- Message Cache
-- Slabs
-- Outgoing Range
-- Number of Queries
-- Infra Cache
+├── cache/
 
-## dnsdist
+├── data/
 
-- Packet Cache
-- TCP Threads
-- TCP Queue
-- UDP Outstanding
+├── docs/
 
-No manual tuning is required.
+├── engine/
 
----
+├── lib/
 
-# Monitoring Platform
+├── output/
 
-SmartDNS Monitoring includes:
+├── scripts/
 
-- Dashboard
-- Nodes
-- Node Detail
-- Statistics
-- Version Distribution
-- Operating System Distribution
-- Virtualization Distribution
-- IPv6 Statistics
-- DNSSEC Statistics
-- Online / Offline Status
+├── templates/
+
+├── VERSION
+
+└── install.sh
+
+```
 
 ---
 
-# Built-in Telemetry
+# Runtime Files
 
-Every SmartDNS installation automatically sends a heartbeat every **5 minutes**.
+SmartDNS stores runtime information in:
 
-Collected information:
+```
 
-- SmartDNS Version
-- UUID
-- Operating System
-- Kernel
-- CPU Model
-- CPU Threads
-- Memory
-- Virtualization
-- IPv4
-- IPv6
-- DNSSEC Status
-- Query Log Status
-- Rate Limit Status
-- Smart Tuning Configuration
-- First Seen
-- Last Seen
+/var/lib/smartdns/
+
+├── uuid
+
+├── install.json
+
+└── install.env
+
+```
+
+These files are automatically created during installation and preserved during upgrades.
 
 ---
 
 # Privacy
 
-SmartDNS **does NOT collect**:
+SmartDNS **does not collect**:
 
 - DNS Queries
-- Customer Traffic
+- Client Requests
 - Resolver Cache
-- Domain Names
-- Client IP Addresses
+- Customer Traffic
 - Personal Information
 
 Telemetry is used only for:
@@ -316,126 +327,32 @@ Telemetry is used only for:
 
 ---
 
-# Architecture
-
-```
-             SmartDNS Node
-
-                    │
-
-      Heartbeat (Every 5 Minutes)
-
-                    │
-
-                    ▼
-
-         SmartDNS Telemetry API
-
-                    │
-
-                    ▼
-
-             JSON Storage
-
-                    │
-
-                    ▼
-
-      SmartDNS Monitoring Dashboard
-```
-
----
-
-# Project Structure
-
-```
-SmartDNS/
-
-├── cache/
-├── data/
-├── docs/
-├── engine/
-├── lib/
-├── output/
-├── scripts/
-├── templates/
-├── VERSION
-├── install.sh
-└── README.md
-```
-
----
-
-# Runtime Files
-
-SmartDNS stores runtime information under:
-
-```
-/var/lib/smartdns/
-
-├── uuid
-├── install.json
-└── install.env
-```
-
-These files are automatically created during installation and preserved during upgrades.
-
----
-
-# Screenshots
-
-## Dashboard
-
-![Dashboard](docs/images/dashboard.png)
-
----
-
-## Nodes
-
-![Nodes](docs/images/nodes.png)
-
----
-
-## Node Detail
-
-![Node Detail](docs/images/node-detail.png)
-
----
-
-## Statistics
-
-![Statistics](docs/images/statistics.png)
-
----
-
 # Roadmap
 
-## Version 1.0.0
+## Current Release
 
-- [x] Smart Installer
-- [x] Hardware Detection
-- [x] Smart Auto Tuning
-- [x] Runtime Builder
-- [x] ACL Generator
-- [x] Security Hardening
-- [x] Blocklist
-- [x] Scheduler
-- [x] Heartbeat
-- [x] Telemetry
-- [x] Dashboard
-- [x] Node Inventory
-- [x] Node Detail
-- [x] Statistics
+- ✅ Smart Installer
+- ✅ Smart Auto Tuning
+- ✅ Hardware Detection
+- ✅ Runtime Builder
+- ✅ ACL Generator
+- ✅ Security Hardening
+- ✅ DNS Blocklist
+- ✅ Scheduler
+- ✅ Automatic Heartbeat
+- ✅ Telemetry
+- ✅ Monitoring Dashboard
+- ✅ Node Inventory
+- ✅ Statistics
 
 ---
 
-## Planned
+## Next Release
 
-- [ ] SmartDNS CLI
-- [ ] Update Checker
-- [ ] SmartDNS Update Command
-- [ ] Automatic Update
-- [ ] Release Channel
+- SmartDNS CLI
+- Update Checker
+- Automatic Update
+- Release Channel
 
 ---
 
@@ -461,17 +378,9 @@ Founder & Lead Developer
 
 **iChand Kusuma**
 
-GitHub
+🌐 https://mynoc.id
 
-https://github.com/ichandkusuma
-
-Website
-
-https://mynoc.id
-
-Email
-
-admin@mynoc.id
+🐙 https://github.com/ichandkusuma
 
 ---
 
@@ -479,6 +388,6 @@ admin@mynoc.id
 
 ### ⭐ If SmartDNS helps your infrastructure, please consider giving this repository a Star.
 
-Made with ❤️ by **MyNOC.ID**
+Made with ❤️ in Indonesia by **MyNOC.ID**
 
 </div>
