@@ -81,8 +81,7 @@ detect_ipv6(){
 
     SERVER_IPV6=$(ip -6 route get 2606:4700:4700::1111 2>/dev/null \
         | awk '/src/ {for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}' \
-        | head -1)
-
+        | head -1) || true
 }
 
 ####################################
@@ -96,7 +95,7 @@ detect_network(){
 
     detect_ipv4
 
-    detect_ipv6
+    detect_ipv6 || true
 
 }
 
