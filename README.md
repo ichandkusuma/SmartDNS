@@ -80,7 +80,7 @@ Starting from **v1.0.0**, SmartDNS also includes built-in telemetry and heartbea
 |-----------|-------------|
 | CPU | 4 Core or Higher |
 | RAM | 4 GB or Higher |
-| Storage | 15 GB SSD |
+| Storage | 15 GB SSD or Higher |
 | Network | IPv4 + IPv6 |
 | OS | Ubuntu 22.04 LTS / Debian 12 |
 
