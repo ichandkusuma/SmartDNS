@@ -1,1 +1,2 @@
 */5 * * * * root flock -n /var/run/smartdns-heartbeat.lock -c 'sleep $(awk "BEGIN{srand(); print int(rand()*60)}"); /usr/local/bin/smartdns-heartbeat'
+
