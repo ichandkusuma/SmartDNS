@@ -20,8 +20,7 @@ SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # SmartDNS Auto Update
-${MINUTE} ${HOUR} * * * root sleep \$(( RANDOM % 1800 )); ${BASE_DIR}/data/update-blocklist.sh >>/var/log/smartdns-blocklist.log 2>&1
-
+${MINUTE} ${HOUR} * * * root ${BASE_DIR}/data/update-blocklist.sh >>/var/log/smartdns-blocklist.log 2>&1
 EOF
 
     chmod 644 /etc/cron.d/smartdns
