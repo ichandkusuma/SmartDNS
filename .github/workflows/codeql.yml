@@ -1,53 +1,62 @@
-name: "CodeQL"
+name: "Security & Linting"
 
 on:
   push:
     branches: [ "main" ]
-    paths:                  # Tambahkan ini agar lebih sensitif
+    paths:
       - '**/*.sh'
       - '**/*.tpl'
-      - '**/*.yaml'
       - '**/*.yml'
+      - '**/*.yaml'
       - '.github/workflows/**'
   pull_request:
     branches: [ "main" ]
     paths:
       - '**/*.sh'
       - '**/*.tpl'
-      - '**/*.yaml'
       - '**/*.yml'
+      - '**/*.yaml'
       - '.github/workflows/**'
-  schedule:
-    - cron: '33 22 * * 0'
 
 jobs:
-  analyze:
-    name: Analyze (${{ matrix.language }})
+  shellcheck:
+    name: ShellCheck (Bash Linter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: '.'
+          ignore_paths: 'cache output docs .git'
+          severity: 'style'          # error, warning, info, style
+          format: 'tty'
+        env:
+          SHELLCHECK_OPTS: "-e SC1091 -e SC1090"  # Ignore source file not found
+
+  codeql:
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
     permissions:
       security-events: write
-      packages: read
-      actions: read
       contents: read
 
     strategy:
-      fail-fast: false
       matrix:
-        language: ['shell', 'actions']
+        language: ['javascript-typescript', 'actions']
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v7
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    # Initialize CodeQL
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v4
-      with:
-        languages: ${{ matrix.language }}
-        # queries: security-extended,security-and-quality   # Bisa di-uncomment
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          # queries: security-extended   # uncomment jika mau lebih strict
 
-    # Run analysis
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v4
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{matrix.language}}"
