@@ -30,7 +30,7 @@ EOF
     systemctl restart cron >/dev/null 2>&1
 
     success "Scheduler installed."
-    info "Daily update scheduled at $(printf "%02d:%02d" "$HOUR" "$MINUTE") + random delay (0-30 minutes)."
+    info "Daily update scheduled at $(printf "%02d:%02d" "$HOUR" "$MINUTE")."
 
 }
 

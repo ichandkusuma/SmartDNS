@@ -192,6 +192,8 @@ run_wizard(){
 
 					done
 
+				else
+						SPOOF_IPV6=$(to_lua_array "$SPOOF_IPV6")
 				fi
 				
 				echo
