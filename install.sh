@@ -170,6 +170,10 @@ if [[ "$INSTALL_PACKAGE" =~ ^[Yy]$ ]]; then
 	info "Setting Hostname..."
 	hostnamectl set-hostname SmartDNS
 	success "Hostname set to SmartDNS."
+	
+	info "Setting Resolve Host..."
+	grep -qxF "127.0.1.1 SmartDNS" /etc/hosts || echo "127.0.1.1 SmartDNS" | sudo tee -a /etc/hosts
+	success "Resolve Host set to SmartDNS."
 
 	wait_package_manager || exit 1
 

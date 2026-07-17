@@ -133,6 +133,7 @@ Existing installations are automatically upgraded while preserving:
 The installer automatically configures:
 
 - Hostname
+- Resolve Host
 - Timezone
 - CPU Threads
 - Cache Size
