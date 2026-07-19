@@ -59,7 +59,7 @@ EOF
 
 case "${1:-}" in
     --blocklist)
-        update_blocklist
+        install_blocklist
         ;;
     --all)
         update_all
