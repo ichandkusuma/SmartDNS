@@ -59,7 +59,9 @@ EOF
 
 case "${1:-}" in
     --blocklist)
-        install_blocklist
+        install_blocklist || exit 1
+		restart_services || exit 1
+		save_state SERVICE
         ;;
     --all)
         update_all
