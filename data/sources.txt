@@ -1,2 +1,6 @@
-https://raw.githubusercontent.com/alsyundawy/TrustPositif/refs/heads/main/sunat-trustpositif.txt
-https://smartdns.mynoc.id/data/domains_isp
+merge https://raw.githubusercontent.com/alsyundawy/TrustPositif/refs/heads/main/sunat-trustpositif.txt
+merge https://raw.githubusercontent.com/alsyundawy/TrustPositif/refs/heads/main/alsyundawy_porn_v2.txt
+merge https://raw.githubusercontent.com/alsyundawy/TrustPositif/refs/heads/main/alsyundawy_gambling_v2.txt
+merge https://raw.githubusercontent.com/alsyundawy/TrustPositif/refs/heads/main/alsyundawy_fake_malware_v2.txt
+
+fallback https://smartdns.mynoc.id/data/domains_isp

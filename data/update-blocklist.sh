@@ -73,13 +73,15 @@ echo "======================================" | tee -a "$LOG"
 # Download Sources
 #########################################
 
-SUCCESS=0
+SUCCESS=1
+FALLBACK_URL=""
 
-while read -r URL
-do
-    [[ -z "$URL" || "$URL" =~ ^# ]] && continue
+> "$RAW"
 
-    echo "Trying $URL" | tee -a "$LOG"
+download_source() {
+
+    local URL="$1"
+    local DOWNLOAD
 
     DOWNLOAD=$(mktemp)
 
@@ -94,27 +96,76 @@ do
         -o "$DOWNLOAD"
     then
 
-        # Pastikan file tidak kosong
         if [[ -s "$DOWNLOAD" ]] && ! grep -qi "<html" "$DOWNLOAD"; then
-            cp "$DOWNLOAD" "$RAW"
-            SUCCESS=1
+
+            cat "$DOWNLOAD" >> "$RAW"
+            echo >> "$RAW"
+
             echo "Success: $URL" | tee -a "$LOG"
+
             rm -f "$DOWNLOAD"
-            break
+
+            return 0
+
         fi
 
         echo "Invalid content: $URL" | tee -a "$LOG"
+
     else
+
         echo "Failed: $URL" | tee -a "$LOG"
+
     fi
 
     rm -f "$DOWNLOAD"
 
+    return 1
+}
+
+while read -r TYPE URL
+do
+
+    [[ -z "${TYPE:-}" ]] && continue
+    [[ "$TYPE" == \#* ]] && continue
+
+    case "$TYPE" in
+
+        merge)
+
+            echo "Trying $URL" | tee -a "$LOG"
+
+            if ! download_source "$URL"; then
+                SUCCESS=0
+            fi
+            ;;
+
+        fallback)
+
+            FALLBACK_URL="$URL"
+            ;;
+
+    esac
+
 done < "$SOURCE"
 
+#########################################
+# Fallback
+#########################################
+
 if [[ $SUCCESS -eq 0 ]]; then
-    echo "All sources failed." | tee -a "$LOG"
-    exit 1
+
+    echo "Merge source failed, using fallback..." | tee -a "$LOG"
+
+    > "$RAW"
+
+    if ! download_source "$FALLBACK_URL"; then
+
+        echo "Fallback download failed." | tee -a "$LOG"
+
+        exit 1
+
+    fi
+
 fi
 
 #########################################
