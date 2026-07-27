@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+sleep $(( RANDOM % 150 ))
+
+source /var/lib/smartdns/install.env
+
+source "$SMARTDNS_HOME/lib/version.sh"
+source "$SMARTDNS_HOME/lib/detect.sh"
+source "$SMARTDNS_HOME/lib/validate.sh"
+source "$SMARTDNS_HOME/lib/system.sh"
+source "$SMARTDNS_HOME/lib/telemetry.sh"
+source "$SMARTDNS_HOME/cache/runtime.env"
+
+# Refresh system information
+detect_os
+detect_virtualization
+detect_cpu
+detect_memory
+detect_network
+detect_hostname
+detect_kernel
+detect_uptime
+
+get_version
+generate_uuid
+
+send_heartbeat >/dev/null 2>&1

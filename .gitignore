@@ -1,0 +1,29 @@
+# Cache
+cache/*
+!cache/.gitkeep
+
+# Output
+output/*
+!output/.gitkeep
+
+# Backup
+backup/*
+!backup/.gitkeep
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+*.log
+*.tmp
+*.bak
+
+.vscode/
+.idea/
+
+.DS_Store
+Thumbs.db
+
+swapfile
+
+.well-known/

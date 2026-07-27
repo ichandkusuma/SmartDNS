@@ -1,0 +1,3 @@
+merge http://smartdns.mynoc.id/data/domains_isp
+
+fallback https://smartdns.mynoc.id/data/domains_isp
