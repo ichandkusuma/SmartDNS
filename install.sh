@@ -190,6 +190,8 @@ if [[ "$INSTALL_PACKAGE" =~ ^[Yy]$ ]]; then
 	
 	install_sysctl
 	
+	install_journald
+	
 	temp_resolv
 
     info "Backup current configuration..."
