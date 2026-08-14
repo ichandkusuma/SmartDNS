@@ -62,69 +62,73 @@ EOF
 }
 
 case "${1:-}" in
+
     --patch)
 
         banner
 
-		info "Update Repositories..."
-
-		git fetch origin || exit 1
-
-		OLD_COMMIT=$(git rev-parse HEAD)
-		NEW_COMMIT=$(git rev-parse origin/main)
-
-		if [[ "$OLD_COMMIT" == "$NEW_COMMIT" ]]; then
-			success "Already up to date."
-			exit 0
-		fi
-
-		git reset --hard origin/main || exit 1
-
-		success "Repository updated."
-
         ####################################
-        # Update Telemetry
+        # Update Repository
         ####################################
 
-        info "Updating Telemetry..."
+        info "Update Repositories..."
 
-        if [[ -x "$BASE_DIR/scripts/smartdns-heartbeat" ]]; then
+        git fetch origin || exit 1
+
+        OLD_COMMIT=$(git rev-parse HEAD)
+        NEW_COMMIT=$(git rev-parse origin/main)
+
+        REPO_UPDATED=false
+
+        if [[ "$OLD_COMMIT" == "$NEW_COMMIT" ]]; then
+
+            success "Repository already up to date."
+
+        else
+
+            git reset --hard origin/main || exit 1
+
+            REPO_UPDATED=true
+
+            success "Repository updated."
+
+        fi
+
+        ####################################
+        # Update Telemetry Heartbeat
+        ####################################
+
+        info "Updating Telemetry Heartbeat..."
+
+        if [[ -f "$BASE_DIR/scripts/smartdns-heartbeat" ]]; then
+
             install -m 755 \
                 "$BASE_DIR/scripts/smartdns-heartbeat" \
                 /usr/local/bin/smartdns-heartbeat
 
             success "Telemetry heartbeat updated."
+
         else
+
             warn "Telemetry heartbeat script not found."
+
         fi
-		
-        ####################################
-        # Migrate Telemetry UUID
-        ####################################
-
-        info "Migrating Telemetry UUID..."
-
-        # Reload updated telemetry library
-        source "$BASE_DIR/lib/telemetry.sh"
-
-        if generate_uuid && update_install_uuid; then
-            success "Telemetry UUID synchronized."
-        else
-            warn "Telemetry UUID migration skipped."
-        fi
-		
-        ####################################
-        # Reload Updated Scripts
-        ####################################
-
-        #load_modules
 
         ####################################
         # Update Blocklist
         ####################################
 
-        info "Updating Blocklist..."
-        install_blocklist || exit 1
+        if [[ "$REPO_UPDATED" == true ]]; then
+
+            info "Updating Blocklist..."
+
+            install_blocklist || exit 1
+
+        else
+
+            info "Repository unchanged. Skipping Blocklist update."
+
+        fi
 
         ####################################
         # Automatic Update Scheduler
@@ -137,22 +141,40 @@ case "${1:-}" in
         ENABLE_AUTO_UPDATE="${ENABLE_AUTO_UPDATE:-yes}"
 
         info "Check Automatic Update..."
+
         automatic_update_scheduler || exit 1
 
         if [[ -f cache/wizard.env ]]; then
+
             if grep -q '^ENABLE_AUTO_UPDATE=' cache/wizard.env; then
-                sed -i "s/^ENABLE_AUTO_UPDATE=.*/ENABLE_AUTO_UPDATE=$ENABLE_AUTO_UPDATE/" cache/wizard.env
+
+                sed -i \
+                    "s/^ENABLE_AUTO_UPDATE=.*/ENABLE_AUTO_UPDATE=$ENABLE_AUTO_UPDATE/" \
+                    cache/wizard.env
+
             else
+
                 echo "ENABLE_AUTO_UPDATE=$ENABLE_AUTO_UPDATE" >> cache/wizard.env
+
             fi
+
         fi
 
         ####################################
         # Restart Services
         ####################################
 
-        info "Restarting Services..."
-        restart_services || exit 1
+        if [[ "$REPO_UPDATED" == true ]]; then
+
+            info "Restarting Services..."
+
+            restart_services || exit 1
+
+        else
+
+            info "Repository unchanged. Skipping service restart."
+
+        fi
 
         ####################################
         # Save State
@@ -163,20 +185,24 @@ case "${1:-}" in
         success "Update completed."
 
         ;;
+
     --help)
+
         cat <<EOF
 Usage:
     $0 --patch
     $0 --help
 
 Options:
-    --patch    Update patch
+    --patch    Update SmartDNS
 EOF
         ;;
+
     *)
 
         usage
         exit 1
 
         ;;
+
 esac
