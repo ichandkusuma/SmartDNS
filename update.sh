@@ -80,19 +80,23 @@ case "${1:-}" in
 
         REPO_UPDATED=false
 
-        if [[ "$OLD_COMMIT" == "$NEW_COMMIT" ]]; then
+		if [[ "$OLD_COMMIT" == "$NEW_COMMIT" ]]; then
 
-            success "Repository already up to date."
+			REPO_UPDATED=false
 
-        else
+			success "Repository already up to date."
 
-            git reset --hard origin/main || exit 1
+		else
 
-            REPO_UPDATED=true
+			git reset --hard origin/main || exit 1
 
-            success "Repository updated."
+			success "Repository updated."
 
-        fi
+			info "Reloading updated updater..."
+
+			exec "$BASE_DIR/update.sh" --patch
+
+		fi
 
         ####################################
         # Update Telemetry Heartbeat
