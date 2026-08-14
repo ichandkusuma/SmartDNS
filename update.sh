@@ -83,6 +83,37 @@ case "${1:-}" in
 		success "Repository updated."
 
         ####################################
+        # Update Telemetry
+        ####################################
+
+        info "Updating Telemetry..."
+
+        if [[ -x "$BASE_DIR/scripts/smartdns-heartbeat" ]]; then
+            install -m 755 \
+                "$BASE_DIR/scripts/smartdns-heartbeat" \
+                /usr/local/bin/smartdns-heartbeat
+
+            success "Telemetry heartbeat updated."
+        else
+            warn "Telemetry heartbeat script not found."
+        fi
+		
+        ####################################
+        # Migrate Telemetry UUID
+        ####################################
+
+        info "Migrating Telemetry UUID..."
+
+        # Reload updated telemetry library
+        source "$BASE_DIR/lib/telemetry.sh"
+
+        if generate_uuid && update_install_uuid; then
+            success "Telemetry UUID synchronized."
+        else
+            warn "Telemetry UUID migration skipped."
+        fi
+		
+        ####################################
         # Reload Updated Scripts
         ####################################
 

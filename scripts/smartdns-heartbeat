@@ -26,4 +26,6 @@ detect_uptime
 get_version
 generate_uuid
 
+update_install_uuid
+
 send_heartbeat >/dev/null 2>&1

@@ -24,12 +24,39 @@ generate_uuid() {
     mkdir -p "$TELEMETRY_DIR"
 
     if [[ -s "$UUID_FILE" ]]; then
-        UUID="$(<"$UUID_FILE")"
-    else
+        UUID="$(tr -d '\r\n' < "$UUID_FILE")"
+    elif [[ -r /proc/sys/kernel/random/uuid ]]; then
+        UUID="$(cat /proc/sys/kernel/random/uuid)"
+    elif command -v uuidgen >/dev/null 2>&1; then
         UUID="$(uuidgen)"
-        printf '%s\n' "$UUID" > "$UUID_FILE"
-        chmod 600 "$UUID_FILE"
+    elif command -v openssl >/dev/null 2>&1; then
+        UUID="$(openssl rand -hex 16 | sed 's/^\(........\)\(....\)\(....\)\(....\)\(............\)$/\1-\2-\3-\4-\5/')"
+    else
+        echo "ERROR: Unable to generate telemetry UUID" >&2
+        return 1
     fi
+
+    if [[ ! "$UUID" =~ ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ ]]; then
+        echo "ERROR: Invalid telemetry UUID: $UUID" >&2
+        return 1
+    fi
+
+    printf '%s\n' "$UUID" > "$UUID_FILE"
+    chmod 600 "$UUID_FILE"
+
+}
+
+####################################
+# Update UUID
+####################################
+update_install_uuid() {
+
+    [[ -z "${UUID:-}" ]] && return 1
+    [[ ! -f "$INSTALL_FILE" ]] && return 0
+
+    sed -i \
+        "s/\"uuid\":\"[^\"]*\"/\"uuid\":\"$UUID\"/" \
+        "$INSTALL_FILE"
 
 }
 
@@ -137,20 +164,25 @@ EOF
 
 send_heartbeat() {
 
+    if [[ -z "${UUID:-}" ]]; then
+        echo "ERROR: Telemetry UUID is empty" >&2
+        return 1
+    fi
+	
     build_telemetry_payload
 
-    curl \
-        --silent \
-        --show-error \
-        --user-agent "SmartDNS/${SMARTDNS_VERSION}" \
-        --connect-timeout 10 \
-        --max-time 30 \
-        --retry 2 \
-        --retry-delay 2 \
-        --header "Content-Type: application/json" \
-        --data "$PAYLOAD" \
-        "$TELEMETRY_URL" \
-        >/dev/null 2>&1 || return 1
+	curl \
+		--silent \
+		--show-error \
+		--user-agent "SmartDNS/${SMARTDNS_VERSION}" \
+		--connect-timeout 10 \
+		--max-time 30 \
+		--retry 2 \
+		--retry-delay 2 \
+		--header "Content-Type: application/json" \
+		--data "$PAYLOAD" \
+		"$TELEMETRY_URL" \
+		|| return 1
 
     return 0
 

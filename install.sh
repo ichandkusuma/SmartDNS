@@ -90,7 +90,7 @@ save_state DETECT
 
 get_version
 
-generate_uuid
+generate_uuid || exit 1
 
 save_install_env
 
