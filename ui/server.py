@@ -1556,9 +1556,14 @@ class SmartDNSHandler(BaseHTTPRequestHandler):
         path = parsed.path
         query = parse_qs(parsed.query)
 
-        # Static assets
-        if path == "/" or path == "/index.html":
-            return self._serve_file(os.path.join(STATIC_DIR, "index.html"), "text/html; charset=utf-8")
+        # SMARTDNS_AUTH_HTML_GUARD_V1
+        # Login page is public; dashboard HTML requires a valid session.
+        if path in ("/", "/index.html", "/static/index.html"):
+            filename = "index.html" if self._is_authenticated() else "login.html"
+            return self._serve_file(
+                os.path.join(STATIC_DIR, filename),
+                "text/html; charset=utf-8"
+            )
         elif path.startswith("/static/"):
             filename = os.path.basename(path)
             file_path = os.path.join(STATIC_DIR, filename)

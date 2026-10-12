@@ -8,7 +8,7 @@
 
 Developed and maintained by **MyNOC.ID**
 
-![Version](https://img.shields.io/badge/version-v1.0.2-blue)
+![Version](https://img.shields.io/badge/version-v1.0.3-blue)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20%7C%2022.04-E95420)
 ![Debian](https://img.shields.io/badge/Debian-12-A81D33)
 ![License](https://img.shields.io/github/license/ichandkusuma/SmartDNS)
@@ -395,6 +395,12 @@ cat /var/lib/smartdns/install.json
 
 ```bash
 cat /var/lib/smartdns/install.env
+```
+
+### View Web UI password
+
+```bash
+grep -oP 'password="\K[^"]+' /etc/dnsdist/dnsdist.conf
 ```
 
 ---
@@ -830,6 +836,12 @@ cat /var/lib/smartdns/install.json
 
 ```bash
 cat /var/lib/smartdns/install.env
+```
+
+### View Web UI password
+
+```bash
+grep -oP 'password="\K[^"]+' /etc/dnsdist/dnsdist.conf
 ```
 
 ---

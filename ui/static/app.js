@@ -30,13 +30,22 @@ async function checkAuth() {
 }
 
 function showLogin() {
-  document.getElementById('login-modal').classList.remove('hidden');
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('password').value = '';
+  const modal = document.getElementById('login-modal');
+  const app = document.getElementById('app');
+  if (modal) modal.classList.remove('hidden');
+  if (app) app.classList.add('hidden');
+  const password = document.getElementById('password');
+  if (password) password.value = '';
 }
 
 function showApp() {
-  document.getElementById('login-modal').classList.add('hidden');
+  // Halaman login tidak memuat dashboard markup.
+  if (!document.getElementById('app')) {
+    window.location.replace('/');
+    return;
+  }
+  const modal = document.getElementById('login-modal');
+  if (modal) modal.classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   
   // Initial data load
@@ -82,7 +91,7 @@ async function handleLogin(e) {
     });
     const data = await res.json();
     if (res.ok && data.success) {
-      showApp();
+      window.location.replace('/');
     } else {
       errorBox.textContent = data.error || 'Username atau password salah.';
       errorBox.classList.remove('hidden');
@@ -100,8 +109,7 @@ async function handleLogout() {
   try {
     await fetch('/api/logout', { method: 'POST' });
   } catch (err) {}
-  showLogin();
-  showToast('Anda telah keluar dari sesi.', 'success');
+  window.location.replace('/');
 }
 
 // --------------------------------------------------------------------------

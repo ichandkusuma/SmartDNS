@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartDNS Control Center &amp; Management Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/app.css?v=3.7">
+</head>
+<body class="dark-theme">
+<div id="login-modal" class="login-wrapper">
+    <div class="login-card glass-panel">
+      <div class="login-brand">
+        <div class="brand-icon pulse-glow">
+          <img src="static/smartdns-logo.png" alt="SmartDNS logo" class="brand-logo-image brand-logo-login">
+        </div>
+        <h2>SmartDNS Control Center</h2>
+        <p class="subtitle">Secure DNS Management &amp; Threat Defense</p>
+      </div>
+
+      <form id="login-form" class="login-form" onsubmit="handleLogin(event)">
+        <div id="login-error" class="alert-box error hidden"></div>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input type="text" id="username" placeholder="Masukkan username" required autocomplete="username" value="admin">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input type="password" id="password" placeholder="Masukkan password" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login" class="btn btn-primary btn-block">
+          <span class="btn-text">Masuk ke Dashboard</span>
+          <div class="spinner hidden" id="login-spinner"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+<script src="/static/app.js"></script>
+</body>
+</html>

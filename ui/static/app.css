@@ -2674,3 +2674,32 @@ select[name="policy"] option,
 .update-cards-grid > .update-card:not(.recommended-card) {
   display: none !important;
 }
+
+
+/* SmartDNS brand logo overrides (v1.0.3 UI polish) */
+.brand-icon {
+  background: transparent;
+  overflow: visible;
+}
+.brand-logo-small {
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+.brand-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.brand-logo-login {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(0, 190, 255, 0.24));
+}
+.brand-logo-sidebar {
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 0 6px rgba(0, 190, 255, 0.2));
+}

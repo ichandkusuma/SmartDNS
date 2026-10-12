@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/app.css?v=3.6">
+  <link rel="stylesheet" href="static/app.css?v=3.8">
 </head>
 <body class="dark-theme">
   <!-- Dynamic Ambient Glows -->
@@ -20,10 +20,7 @@
     <div class="login-card glass-panel">
       <div class="login-brand">
         <div class="brand-icon pulse-glow">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M9 12l2 2 4-4"/>
-          </svg>
+          <img src="static/smartdns-logo.png" alt="SmartDNS logo" class="brand-logo-image brand-logo-login">
         </div>
         <h2>SmartDNS Control Center</h2>
         <p class="subtitle">Secure DNS Management &amp; Threat Defense</p>
@@ -68,9 +65,7 @@
       <div class="sidebar-header">
         <div class="brand-badge">
           <div class="brand-logo-small">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+            <img src="static/smartdns-logo.png" alt="SmartDNS logo" class="brand-logo-image brand-logo-sidebar">
           </div>
           <div>
             <span class="brand-title">SmartDNS</span>
@@ -156,8 +151,8 @@
 
       
     <div class="sidebar-credit">
-      <div>GUI by <strong>Yohanes Exklesia</strong></div>
-      <div>Developed by <a href="https://mynoc.id" target="_blank" title="ISP Managed Service Solutions - MyNOC.ID"><strong>MyNOC.ID</strong></a></div>
+      <div>GUI Source by <strong>Yohanes Exklesia</strong></div>
+      <div>Developed by <a href="https://www.facebook.com/Ichandkusuma/" target="_blank"><strong>Chandra KW</strong></a> | <a href="https://mynoc.id" target="_blank" title="ISP Managed Service Solutions - MyNOC.ID"><strong>MyNOC.ID</strong></a></div>
     </div>
 <div class="sidebar-footer">
         <div class="server-node-info">
@@ -652,7 +647,7 @@
 
                 <!-- Add ACL Input -->
                 <div class="add-item-row mt-2">
-                  <input type="text" id="cfg-new-acl" class="custom-input font-mono" placeholder="Prefix CIDR (contoh: 103.54.168.0/23)..." onkeydown="if(event.key==='Enter'){event.preventDefault();addACLPrefix();}">
+                  <input type="text" id="cfg-new-acl" class="custom-input font-mono" placeholder="Prefix CIDR (contoh: 103.151.222.0/23)..." onkeydown="if(event.key==='Enter'){event.preventDefault();addACLPrefix();}">
                   <button type="button" class="btn btn-secondary" onclick="addACLPrefix()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -2032,6 +2027,6 @@ dana.id"></textarea>
     </main>
   </div>
 
-  <script src="/static/app.js?v=3.6"></script>
+  <script src="static/app.js?v=3.6"></script>
 </body>
 </html>
