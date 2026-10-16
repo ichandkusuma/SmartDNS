@@ -6,7 +6,7 @@
 
 ### High Performance Recursive DNS Platform powered by **Unbound** and **dnsdist**
 
-Developed and maintained by **MyNOC.ID**
+Developed and maintained by [**MyNOC.ID**](https://mynoc.id)
 
 ![Version](https://img.shields.io/badge/version-v1.0.3-blue)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20%7C%2022.04-E95420)
@@ -103,15 +103,13 @@ Web UI tersedia di `http://IP-SERVER:5000`. Login menggunakan username `admin` d
 
 ## 🖥️ Operating System Support
 
-SmartDNS **v1.0.2** telah diuji pada:
+SmartDNS **v1.0.3** telah diuji pada:
 
 | Operating System | Status |
 |---|:---:|
 | Ubuntu 22.04 LTS | ✅ Supported |
 | Ubuntu 24.04 LTS | ✅ Supported |
 | Debian 12 | ✅ Supported |
-
-> Ubuntu 24.04 LTS telah divalidasi melalui fresh installation pada v1.0.2.
 
 ---
 
@@ -135,7 +133,7 @@ SmartDNS **v1.0.2** telah diuji pada:
 | RAM | 4 GB or Higher |
 | Storage | 20 GB SSD |
 | Network | IPv4 + IPv6 |
-| OS | Ubuntu 24.04 LTS / Ubuntu 22.04 LTS / Debian 12 |
+| OS | Ubuntu 22.04 LTS |
 
 ---
 
@@ -430,7 +428,7 @@ SmartDNS/
 
 ## 📜 Changelog
 
-Lihat **CHANGELOG.md** untuk riwayat versi dan catatan rilis.
+Lihat [**CHANGELOG.md**](CHANGELOG.md) untuk riwayat versi dan catatan rilis.
 
 ---
 
@@ -438,7 +436,7 @@ Lihat **CHANGELOG.md** untuk riwayat versi dan catatan rilis.
 
 MIT License
 
-Dipersembahkan oleh **MyNOC.ID**
+Dipersembahkan oleh [**MyNOC.ID**](https://mynoc.id)
 
 https://mynoc.id
 
@@ -462,7 +460,7 @@ Selalu validasi konfigurasi di lingkungan Anda sendiri sebelum menerapkannya ke 
 
 ### ⭐ If SmartDNS helps your infrastructure, please consider giving this repository a Star.
 
-Made with ❤️ in Indonesia by **MyNOC.ID**
+Made with ❤️ in Indonesia by [**MyNOC.ID**](https://mynoc.id)
 
 </div>
 
@@ -544,15 +542,13 @@ The Web UI is available at `http://SERVER-IP:5000`. Log in with username `admin`
 
 ## 🖥️ Operating System Support
 
-SmartDNS **v1.0.2** has been tested on:
+SmartDNS **v1.0.3** has been tested on:
 
 | Operating System | Status |
 |---|:---:|
 | Ubuntu 22.04 LTS | ✅ Supported |
 | Ubuntu 24.04 LTS | ✅ Supported |
 | Debian 12 | ✅ Supported |
-
-> Ubuntu 24.04 LTS has been validated through a fresh installation on v1.0.2.
 
 ---
 
@@ -576,7 +572,7 @@ SmartDNS **v1.0.2** has been tested on:
 | RAM | 4 GB or Higher |
 | Storage | 20 GB SSD |
 | Network | IPv4 + IPv6 |
-| OS | Ubuntu 24.04 LTS / Ubuntu 22.04 LTS / Debian 12 |
+| OS | Ubuntu 22.04 LTS |
 
 ---
 
@@ -871,7 +867,7 @@ SmartDNS/
 
 ## 📜 Changelog
 
-See **CHANGELOG.md** for version history and release notes.
+See [**CHANGELOG.md**](CHANGELOG.md) for version history and release notes.
 
 ---
 
@@ -879,7 +875,7 @@ See **CHANGELOG.md** for version history and release notes.
 
 MIT License
 
-Presented by **MyNOC.ID**
+Presented by [**MyNOC.ID**](https://mynoc.id)
 
 https://mynoc.id
 
@@ -903,6 +899,6 @@ Always validate configurations in your own environment before deploying to produ
 
 ### ⭐ If SmartDNS helps your infrastructure, please consider giving this repository a Star.
 
-Made with ❤️ in Indonesia by **MyNOC.ID**
+Made with ❤️ in Indonesia by [**MyNOC.ID**](https://mynoc.id)
 
 </div>
