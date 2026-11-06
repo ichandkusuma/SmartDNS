@@ -137,7 +137,7 @@
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
           </svg>
-          <span>Live Analytics &amp; Query Log</span>
+          <span>Live Analytics</span>
           <span class="live-dot" title="Live DNS Telemetry"></span>
         </button>
 
@@ -394,7 +394,7 @@
                   <line x1="12" y1="20" x2="12" y2="4"></line>
                   <line x1="6" y1="20" x2="6" y2="14"></line>
                 </svg>
-                Live Analytics &amp; Query Log
+                Live Analytics
               </button>
             </div>
           </div>
@@ -936,36 +936,6 @@
                 </div>
               </div>
 
-              <!-- Card 9: Query Logging Config -->
-              <div class="config-card glass-panel p-4">
-                <div class="config-card-header">
-                  <div class="card-title-wrap">
-                    <span class="card-icon icon-purple">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10 9 9 9 8 9"></polyline>
-                      </svg>
-                    </span>
-                    <div>
-                      <h3>Pencatatan Riwayat Query (Query Log)</h3>
-                      <p class="card-subtitle">Simpan seluruh query DNS masuk ke file log server</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="toggle-card-box mt-3 p-3 glass-card">
-                  <label class="switch-toggle-label" for="cfg-query-log-enable">
-                    <input type="checkbox" id="cfg-query-log-enable">
-                    <span class="switch-slider"></span>
-                    <span class="switch-text">Aktifkan Pencatatan Query Log (LogAction)</span>
-                  </label>
-                  <p class="field-hint mt-2 mb-0">Query akan dicatat ke <code>/var/log/dnsdist_queries.log</code> dan dapat dipantau langsung di tab Live Analytics &amp; Query Log.</p>
-                </div>
-              </div>
-
             </div>
 
             <!-- Form Action Footer -->
@@ -1388,7 +1358,7 @@ dana.id"></textarea>
         </div>
       </section>
 
-      <!-- Tab Content: Live Analytics & Query Log -->
+      <!-- Tab Content: Live Analytics -->
       <section id="tab-analytics" class="tab-pane">
         <div class="glass-panel p-5">
           <div class="editor-header">
@@ -1397,8 +1367,8 @@ dana.id"></textarea>
                 <span class="file-badge">dnsdist console</span>
                 <span class="live-pulse-badge">Real-Time Telemetry</span>
               </div>
-              <h2 class="section-title mt-2">Live Analytics &amp; Riwayat Query</h2>
-              <p class="section-desc">Pantau statistik query real-time, kesehatan resolver upstream, domain terpopuler, dan catatan query log.</p>
+              <h2 class="section-title mt-2">Live Analytics</h2>
+              <p class="section-desc">Pantau statistik query real-time, kesehatan resolver upstream, dan domain terpopuler.</p>
             </div>
 
             <div class="editor-action-buttons">
@@ -1558,51 +1528,6 @@ dana.id"></textarea>
                 </table>
               </div>
             </div>
-          </div>
-
-          <!-- Live Query Log Viewer Box -->
-          <div class="glass-panel p-4 mt-4">
-            <div class="querylog-header-bar">
-              <div class="querylog-title-wrap">
-                <h3 class="panel-title mb-0">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                  </svg>
-                  Riwayat Query Log (/var/log/dnsdist_queries.log)
-                </h3>
-                <span class="file-size-badge" id="querylog-size-badge">-</span>
-              </div>
-
-              <div class="querylog-actions">
-                <select id="querylog-lines-select" class="custom-select custom-select-sm" onchange="fetchQueryLog()">
-                  <option value="50">50 baris terakhir</option>
-                  <option value="100" selected>100 baris terakhir</option>
-                  <option value="250">250 baris terakhir</option>
-                  <option value="500">500 baris terakhir</option>
-                </select>
-                <button class="btn btn-secondary btn-sm" onclick="fetchQueryLog()">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M23 4v6h-6"></path>
-                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                  </svg>
-                  <span>Segarkan Log</span>
-                </button>
-                <button class="btn btn-danger btn-sm" onclick="clearQueryLog()">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                  </svg>
-                  <span>Kosongkan Log</span>
-                </button>
-              </div>
-            </div>
-
-            <div id="querylog-status-notice" class="mt-2 text-sm text-secondary"></div>
-            <pre class="log-viewer font-mono querylog-terminal mt-3" id="querylog-viewer">Memuat catatan query...</pre>
           </div>
         </div>
       </section>
