@@ -37,6 +37,11 @@ command -v dnsdist >/dev/null || {
     exit 1
 }
 
+command -v gzip >/dev/null || {
+    echo "gzip not found"
+    exit 1
+}
+
 #########################################
 # Lock
 #########################################
@@ -74,7 +79,7 @@ echo "======================================" | tee -a "$LOG"
 #########################################
 
 SUCCESS=1
-FALLBACK_URL=""
+FALLBACK_URLS=()
 
 > "$RAW"
 
@@ -82,8 +87,15 @@ download_source() {
 
     local URL="$1"
     local DOWNLOAD
+    local CONTENT
+    local IS_GZIP=0
 
     DOWNLOAD=$(mktemp)
+    CONTENT=$(mktemp)
+
+    cleanup_source_tmp() {
+        rm -f "$DOWNLOAD" "$CONTENT"
+    }
 
     if curl \
         -L \
@@ -96,20 +108,57 @@ download_source() {
         -o "$DOWNLOAD"
     then
 
-        if [[ -s "$DOWNLOAD" ]] && ! grep -qi "<html" "$DOWNLOAD"; then
+        if [[ ! -s "$DOWNLOAD" ]]; then
+            echo "Invalid content: $URL" | tee -a "$LOG"
+            cleanup_source_tmp
+            return 1
+        fi
 
-            cat "$DOWNLOAD" >> "$RAW"
-            echo >> "$RAW"
+        # Prefer the URL extension, but also detect gzip by file magic.
+        # This keeps compatibility with plain files and .txt files.
+        if [[ "$URL" =~ \.gz([?#].*)?$ ]]; then
+            IS_GZIP=1
+        elif gzip -t "$DOWNLOAD" >/dev/null 2>&1; then
+            IS_GZIP=1
+        fi
 
-            echo "Success: $URL" | tee -a "$LOG"
+        if (( IS_GZIP == 1 )); then
 
-            rm -f "$DOWNLOAD"
+            echo "Detected gzip source: $URL" | tee -a "$LOG"
 
-            return 0
+            if ! gzip -t "$DOWNLOAD" >/dev/null 2>&1; then
+                echo "Invalid gzip: $URL" | tee -a "$LOG"
+                cleanup_source_tmp
+                return 1
+            fi
+
+            if ! gzip -dc "$DOWNLOAD" > "$CONTENT"; then
+                echo "Gzip extraction failed: $URL" | tee -a "$LOG"
+                cleanup_source_tmp
+                return 1
+            fi
+
+        else
+
+            echo "Detected plain source: $URL" | tee -a "$LOG"
+
+            cat "$DOWNLOAD" > "$CONTENT"
 
         fi
 
-        echo "Invalid content: $URL" | tee -a "$LOG"
+        if [[ ! -s "$CONTENT" ]] || grep -qi "<html" "$CONTENT"; then
+            echo "Invalid/HTML content: $URL" | tee -a "$LOG"
+            cleanup_source_tmp
+            return 1
+        fi
+
+        cat "$CONTENT" >> "$RAW"
+        echo >> "$RAW"
+
+        echo "Success: $URL" | tee -a "$LOG"
+
+        cleanup_source_tmp
+        return 0
 
     else
 
@@ -117,8 +166,7 @@ download_source() {
 
     fi
 
-    rm -f "$DOWNLOAD"
-
+    cleanup_source_tmp
     return 1
 }
 
@@ -141,7 +189,7 @@ do
 
         fallback)
 
-            FALLBACK_URL="$URL"
+            FALLBACK_URLS+=( "$URL" )
             ;;
 
     esac
@@ -158,12 +206,29 @@ if [[ $SUCCESS -eq 0 ]]; then
 
     > "$RAW"
 
-    if ! download_source "$FALLBACK_URL"; then
-
-        echo "Fallback download failed." | tee -a "$LOG"
-
+    if (( ${#FALLBACK_URLS[@]} == 0 )); then
+        echo "No fallback source configured." | tee -a "$LOG"
         exit 1
+    fi
 
+    FALLBACK_SUCCESS=0
+
+    for FALLBACK_URL in "${FALLBACK_URLS[@]}"; do
+        [[ -z "$FALLBACK_URL" ]] && continue
+
+        echo "Trying fallback $FALLBACK_URL" | tee -a "$LOG"
+
+        if download_source "$FALLBACK_URL"; then
+            FALLBACK_SUCCESS=1
+            break
+        fi
+
+        echo "Fallback failed: $FALLBACK_URL" | tee -a "$LOG"
+    done
+
+    if (( FALLBACK_SUCCESS != 1 )); then
+        echo "All fallback sources failed." | tee -a "$LOG"
+        exit 1
     fi
 
 fi
@@ -213,18 +278,6 @@ if (( COUNT < 1000 )); then
 fi
 
 #########################################
-# Replace Blocklist
-#########################################
-
-mv "$NEW" "$TMP"
-
-TOTAL=$(wc -l < "$TMP")
-
-echo "Replacing blocklist ($TOTAL domains)" | tee -a "$LOG"
-
-mv "$TMP" "$FINAL"
-
-#########################################
 # Convert to CDB
 #########################################
 
@@ -235,7 +288,7 @@ awk '{
 }
 END{
     print ""
-}' "$FINAL" > "$CDB_INPUT"
+}' "$NEW" > "$CDB_INPUT"
 
 cdbmake "$CDB_TMP" "$WORKDIR/cdbmake.tmp" < "$CDB_INPUT"
 
@@ -247,9 +300,18 @@ if [[ ! -s "$CDB_TMP" ]]; then
 
 fi
 
-mv "$CDB_TMP" "$CDB_FILE"
+#########################################
+# Atomic Replace
+#########################################
 
-echo "CDB build completed." | tee -a "$LOG"
+TOTAL=$(wc -l < "$NEW")
+
+echo "Replacing blocklist ($TOTAL domains)" | tee -a "$LOG"
+
+mv -f "$CDB_TMP" "$CDB_FILE"
+mv -f "$NEW" "$FINAL"
+
+echo "Blocklist and CDB replaced successfully." | tee -a "$LOG"
 
 #########################################
 # Reload dnsdist
@@ -266,6 +328,7 @@ if systemctl is-active --quiet dnsdist; then
     else
 
         echo "dnsdist reload failed." | tee -a "$LOG"
+
         exit 1
 
     fi
@@ -283,4 +346,3 @@ fi
 echo "Update completed successfully." | tee -a "$LOG"
 
 exit 0
-

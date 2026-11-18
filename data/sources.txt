@@ -1,3 +1,4 @@
-merge https://raw.githubusercontent.com/ichandkusuma/SmartDNS-data/main/domains_isp
+merge https://raw.githubusercontent.com/ichandkusuma/SmartDNS-data/main/domains_isp.gz
 
+fallback http://smartdns.mynoc.id/data/domains_isp.gz
 fallback http://smartdns.mynoc.id/data/domains_isp

@@ -2,6 +2,18 @@
 
 All notable changes to SmartDNS are documented in this file.
 
+## [1.0.4] - 2026-11-18
+
+### Added
+- Multi fallback support for blocklist sources.
+- Gzip blocklist source support.
+- Plaintext blocklist fallback support.
+- Sequential fallback processing.
+
+### Improved
+- Blocklist updater resilience when the primary source is unavailable.
+- Fallback processing now stops after the first successful source.
+
 ## [1.0.3] - 2026-10-11
 
 ### Added

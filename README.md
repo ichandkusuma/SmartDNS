@@ -8,7 +8,7 @@
 
 Developed and maintained by [**MyNOC.ID**](https://mynoc.id)
 
-![Version](https://img.shields.io/badge/version-v1.0.3-blue)
+![Version](https://img.shields.io/badge/version-v1.0.4-blue)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20%7C%2022.04-E95420)
 ![Debian](https://img.shields.io/badge/Debian-12-A81D33)
 ![License](https://img.shields.io/github/license/ichandkusuma/SmartDNS)
@@ -103,7 +103,7 @@ Web UI tersedia di `http://IP-SERVER:5000`. Login menggunakan username `admin` d
 
 ## 🖥️ Operating System Support
 
-SmartDNS **v1.0.3** telah diuji pada:
+SmartDNS **v1.0.4** telah diuji pada:
 
 | Operating System | Status |
 |---|:---:|
@@ -270,13 +270,18 @@ SmartDNS menyediakan DNS blocklist yang dapat diperbarui secara otomatis.
 
 Blocklist akan:
 
-1. Download source
+1. Download primary source
 2. Validate downloaded content
-3. Extract domain
-4. Normalize domain
-5. Remove duplicate entries
-6. Generate CDB database
-7. Reload dnsdist
+3. If the primary source fails, try fallback sources sequentially
+4. Support gzip and plaintext blocklist sources
+5. Extract domains
+6. Normalize domain
+7. Remove duplicate entries
+8. Generate CDB database
+9. Reload dnsdist
+
+Jika primary source gagal, SmartDNS akan mencoba fallback secara berurutan.
+Proses berhenti pada source pertama yang berhasil.
 
 Blocklist dapat diperbarui secara manual menggunakan:
 
@@ -285,6 +290,35 @@ bash data/update-blocklist.sh
 ```
 
 Automatic update dijalankan menggunakan Cron Scheduler.
+
+---
+
+### Konfigurasi Daftar Blokir
+
+Sumber daftar blokir dikonfigurasi di:
+
+data/sources.txt -> /opt/blocklist/sources.txt
+
+File ini mendukung:
+
+- `merge` — sumber daftar blokir utama.
+
+- `fallback` — sumber cadangan yang digunakan ketika sumber utama gagal.
+
+Sumber cadangan dicoba secara berurutan hingga salah satunya berhasil.
+
+Contoh konfigurasi:
+
+```text
+merge https://raw.githubusercontent.com/ichandkusuma/SmartDNS-data/main/domains_isp.gz
+
+fallback http://smartdns.mynoc.id/data/domains_isp.gz
+fallback http://smartdns.mynoc.id/data/domains_isp
+```
+
+SmartDNS akan mencoba `merge` terlebih dahulu. Jika gagal, setiap `fallback`
+akan dicoba secara berurutan dan proses berhenti pada source pertama yang berhasil.
+
 
 ---
 
@@ -407,21 +441,63 @@ grep -oP 'password="\K[^"]+' /etc/dnsdist/dnsdist.conf
 
 ```text
 SmartDNS/
-├── cache/
+├── cache/                  # Runtime state & generated files
 ├── data/
+│   ├── sources.txt
+│   └── update-blocklist.sh
 ├── docs/
 │   └── images/
 │       ├── banner.png
 │       └── social-preview.png
 ├── engine/
+│   ├── acl.sh
+│   ├── blocklist.sh
+│   ├── cron.sh
+│   ├── logger.sh
+│   ├── package.sh
+│   ├── render.sh
+│   ├── runtime.sh
+│   ├── secret.sh
+│   ├── security.sh
+│   ├── service.sh
+│   ├── state.sh
+│   ├── swap.sh
+│   ├── sysctl.sh
+│   ├── template.sh
+│   ├── tuning.sh
+│   ├── update.sh
+│   └── wizard.sh
 ├── lib/
-├── output/
+│   ├── colors.sh
+│   ├── detect.sh
+│   ├── logger.sh
+│   ├── system.sh
+│   ├── telemetry.sh
+│   ├── validate.sh
+│   └── version.sh
+├── output/                # Generated configuration
 ├── scripts/
+│   └── smartdns-heartbeat
 ├── templates/
+│   ├── dnsdist.conf.tpl
+│   ├── recursive.conf.tpl
+│   └── smartdns-heartbeat.cron
+├── ui/
+│   ├── install-local.sh
+│   ├── server.py
+│   ├── smartdns-ui.service
+│   └── static/
+│       ├── app.css
+│       ├── app.js
+│       ├── index.html
+│       ├── login.html
+│       └── smartdns-logo.png
+├── .gitignore
+├── CHANGELOG.md
+├── README.md
 ├── VERSION
 ├── install.sh
-├── update.sh
-└── README.md
+└── update.sh
 ```
 
 ---
@@ -542,7 +618,7 @@ The Web UI is available at `http://SERVER-IP:5000`. Log in with username `admin`
 
 ## 🖥️ Operating System Support
 
-SmartDNS **v1.0.3** has been tested on:
+SmartDNS **v1.0.4** has been tested on:
 
 | Operating System | Status |
 |---|:---:|
@@ -709,13 +785,18 @@ SmartDNS provides a DNS blocklist that can be updated automatically.
 
 The blocklist update process:
 
-1. Download sources
+1. Download primary source
 2. Validate downloaded content
-3. Extract domains
-4. Normalize domains
-5. Remove duplicate entries
-6. Generate the CDB database
-7. Reload dnsdist
+3. If the primary source fails, try fallback sources sequentially
+4. Support gzip and plaintext blocklist sources
+5. Extract domains
+6. Normalize domain
+7. Remove duplicate entries
+8. Generate CDB database
+9. Reload dnsdist
+
+If the primary source fails, SmartDNS will try fallbacks sequentially.
+The process stops at the first successful source.
 
 The blocklist can also be updated manually:
 
@@ -724,6 +805,34 @@ bash data/update-blocklist.sh
 ```
 
 Automatic updates are scheduled using Cron.
+
+---
+
+### Blocklist Source Configuration
+
+Blocklist sources are configured in:
+
+data/sources.txt -> /opt/blocklist/sources.txt
+
+The file supports:
+
+- `merge` — primary blocklist source.
+- `fallback` — fallback source used when the primary source fails.
+
+Fallback sources are attempted sequentially until one succeeds.
+
+Example configuration:
+
+```text
+merge https://raw.githubusercontent.com/ichandkusuma/SmartDNS-data/main/domains_isp.gz
+
+fallback http://smartdns.mynoc.id/data/domains_isp.gz
+fallback http://smartdns.mynoc.id/data/domains_isp
+```
+
+SmartDNS tries the `merge` source first. If it fails, each `fallback` source
+is attempted sequentially and the process stops at the first successful source.
+
 
 ---
 
@@ -846,21 +955,63 @@ grep -oP 'password="\K[^"]+' /etc/dnsdist/dnsdist.conf
 
 ```text
 SmartDNS/
-├── cache/
+├── cache/                  # Runtime state & generated files
 ├── data/
+│   ├── sources.txt
+│   └── update-blocklist.sh
 ├── docs/
 │   └── images/
 │       ├── banner.png
 │       └── social-preview.png
 ├── engine/
+│   ├── acl.sh
+│   ├── blocklist.sh
+│   ├── cron.sh
+│   ├── logger.sh
+│   ├── package.sh
+│   ├── render.sh
+│   ├── runtime.sh
+│   ├── secret.sh
+│   ├── security.sh
+│   ├── service.sh
+│   ├── state.sh
+│   ├── swap.sh
+│   ├── sysctl.sh
+│   ├── template.sh
+│   ├── tuning.sh
+│   ├── update.sh
+│   └── wizard.sh
 ├── lib/
-├── output/
+│   ├── colors.sh
+│   ├── detect.sh
+│   ├── logger.sh
+│   ├── system.sh
+│   ├── telemetry.sh
+│   ├── validate.sh
+│   └── version.sh
+├── output/                # Generated configuration
 ├── scripts/
+│   └── smartdns-heartbeat
 ├── templates/
+│   ├── dnsdist.conf.tpl
+│   ├── recursive.conf.tpl
+│   └── smartdns-heartbeat.cron
+├── ui/
+│   ├── install-local.sh
+│   ├── server.py
+│   ├── smartdns-ui.service
+│   └── static/
+│       ├── app.css
+│       ├── app.js
+│       ├── index.html
+│       ├── login.html
+│       └── smartdns-logo.png
+├── .gitignore
+├── CHANGELOG.md
+├── README.md
 ├── VERSION
 ├── install.sh
-├── update.sh
-└── README.md
+└── update.sh
 ```
 
 ---
